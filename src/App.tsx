@@ -18,7 +18,7 @@ function saveDB(db) {
 }
 
 // ─── API — proxied through Netlify Function ────────────────────────────────────
-const API_URL = '/api/claude'
+const API_URL = '/.netlify/functions/claude'
 const MODEL   = 'claude-sonnet-4-20250514'
 
 async function callProxy(payload) {
