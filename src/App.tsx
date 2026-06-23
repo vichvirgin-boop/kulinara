@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 
 // ─── Storage adapter layer ──────────────────────────────────────────────────────
 // Today this talks to localStorage. Long-term plan: swap `localAdapter` below
