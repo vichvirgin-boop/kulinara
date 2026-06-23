@@ -11,6 +11,11 @@ body {
   color: #F0EDE8;
   font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
 }
 
 ::-webkit-scrollbar { width: 4px; }
@@ -21,12 +26,18 @@ body {
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* iOS Safari: 100vh includes the area behind the
+                     collapsing address bar, causing layout jumps when it
+                     shows/hides. 100dvh tracks the actual visible viewport.
+                     Falls back to 100vh on browsers without dvh support. */
   max-width: 480px;
   margin: 0 auto;
+  position: relative;
+  overflow: hidden;
 }
 
-.header { padding: 20px 20px 0; }
+.header { padding: 20px 20px 0; flex-shrink: 0; }
 
 .eyebrow {
   font-size: 10px;
@@ -46,7 +57,10 @@ body {
 
 .scroll {
   flex: 1;
+  min-height: 0; /* required for flex children to actually scroll instead of overflowing */
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   padding: 0 16px 110px;
 }
 
@@ -99,6 +113,12 @@ body {
   padding: 3px 10px;
   margin: 3px 3px 0 0;
   color: #F0EDE8;
+  font-family: 'Inter', sans-serif;
+}
+button.pill {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 /* ── Badges ── */
@@ -399,6 +419,75 @@ textarea.input { resize: vertical; min-height: 72px; }
 }
 .notice.warn { background: #F5C84218; border-color: #F5C84240; color: #F5C842; }
 .notice.error { background: #FF445518; border-color: #FF445540; color: #FF4455; }
+
+.storage-banner {
+  background: linear-gradient(135deg, #2D2410, #221C0E);
+  border: 1px solid #F5C84250;
+  border-radius: 16px;
+  padding: 14px 14px 14px 16px;
+  margin-bottom: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.storage-banner-icon { color: #F5C842; flex-shrink: 0; margin-top: 1px; }
+.storage-banner-body { flex: 1; min-width: 0; }
+.storage-banner-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #F5C842; margin-bottom: 4px; }
+.storage-banner-text { font-size: 12px; color: #C9C4B0; line-height: 1.5; }
+.storage-banner-close { background: none; border: none; color: #8B8FA8; cursor: pointer; flex-shrink: 0; padding: 2px; }
+.storage-banner-close:hover { color: #F0EDE8; }
+
+.backup-nudge {
+  background: #FF6B3512;
+  border: 1px solid #FF6B3530;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #F0EDE8;
+}
+.backup-nudge strong { color: #FF6B35; }
+
+.context-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #1A1D27;
+  border: 1px solid #2E3248;
+  border-radius: 20px;
+  padding: 4px 10px 4px 8px;
+  font-size: 11px;
+  color: #8B8FA8;
+}
+
+.undo-toast {
+  position: fixed;
+  bottom: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 448px;
+  background: #22263A;
+  border: 1px solid #383D5A;
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  color: #F0EDE8;
+  z-index: 150;
+  box-shadow: 0 8px 24px #00000060;
+  animation: toast-in 0.2s ease-out;
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
 
 .expand-arrow { color: #8B8FA8; transition: transform 0.2s; font-size: 12px; }
 .expand-arrow.open { transform: rotate(180deg); }
